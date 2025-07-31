@@ -5,12 +5,9 @@
   "main": "index.html",
   "scripts": {
     "dev": "vercel dev",
-    "build": "echo 'Static site - no build needed'",
-    "deploy": "vercel --prod",
-    "preview": "vercel"
-  },
-  "devDependencies": {
-    "@vercel/node": "^3.0.0"
+    "build": "echo 'Static site ready for deployment'",
+    "start": "echo 'Static site - no server needed'",
+    "deploy": "vercel --prod"
   },
   "keywords": [
     "enterprise",
@@ -20,13 +17,16 @@
     "erp",
     "project-management",
     "it-professionals",
-    "business-software",
-    "vercel"
+    "business-software"
   ],
   "author": "Enterprise Software Hub",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/enterprise-software-hub"
+    "url": "https://github.com/Runningcat00/enterprise-software-hub.git"
+  },
+  "homepage": "https://enterprisesoftwarehub.com",
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
