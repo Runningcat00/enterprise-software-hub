@@ -1,0 +1,106 @@
+{
+  "domain": "enterprisesoftwarehub.com",
+  "email_provider": "titan",
+  "dns_records_required": {
+    "mx_records": [
+      {
+        "type": "MX",
+        "name": "@",
+        "value": "mx1.titan.email",
+        "priority": 10,
+        "ttl": 3600
+      },
+      {
+        "type": "MX", 
+        "name": "@",
+        "value": "mx2.titan.email",
+        "priority": 20,
+        "ttl": 3600
+      }
+    ],
+    "txt_records": [
+      {
+        "type": "TXT",
+        "name": "@",
+        "value": "v=spf1 include:titan.email ~all",
+        "description": "SPF Record for Titan Email"
+      },
+      {
+        "type": "TXT",
+        "name": "_dmarc",
+        "value": "v=DMARC1; p=quarantine; rua=mailto:dmarc@enterprisesoftwarehub.com",
+        "description": "DMARC Record (optional but recommended)"
+      }
+    ],
+    "dkim_record": {
+      "type": "TXT",
+      "name": "default._domainkey",
+      "value": "[TO_BE_PROVIDED_BY_TITAN]",
+      "description": "DKIM record will be provided by Titan after account setup"
+    }
+  },
+  "email_accounts_to_create": [
+    {
+      "email": "hello@enterprisesoftwarehub.com",
+      "purpose": "Main business contact",
+      "use_for": ["general_inquiries", "affiliate_applications", "business_communications"]
+    },
+    {
+      "email": "partnerships@enterprisesoftwarehub.com", 
+      "purpose": "Affiliate and partnership communications",
+      "use_for": ["salesforce_partner", "hubspot_partner", "vendor_relationships"]
+    },
+    {
+      "email": "support@enterprisesoftwarehub.com",
+      "purpose": "Customer support and technical help",
+      "use_for": ["user_support", "technical_issues", "platform_help"]
+    },
+    {
+      "email": "noreply@enterprisesoftwarehub.com",
+      "purpose": "Automated system emails",
+      "use_for": ["newsletter_system", "automated_responses", "system_notifications"]
+    },
+    {
+      "email": "press@enterprisesoftwarehub.com",
+      "purpose": "Media and PR inquiries", 
+      "use_for": ["media_contact", "press_releases", "pr_communications"]
+    }
+  ],
+  "integration_services": {
+    "convertkit": {
+      "from_email": "hello@enterprisesoftwarehub.com",
+      "from_name": "Enterprise Software Hub",
+      "reply_to": "hello@enterprisesoftwarehub.com"
+    },
+    "mailchimp": {
+      "from_email": "hello@enterprisesoftwarehub.com",
+      "from_name": "Enterprise Software Hub Team",
+      "reply_to": "hello@enterprisesoftwarehub.com" 
+    },
+    "website_forms": {
+      "contact_form_recipient": "hello@enterprisesoftwarehub.com",
+      "support_form_recipient": "support@enterprisesoftwarehub.com",
+      "partnership_form_recipient": "partnerships@enterprisesoftwarehub.com"
+    }
+  },
+  "verification_steps": [
+    {
+      "step": 1,
+      "action": "Check MX records",
+      "tool": "https://mxtoolbox.com",
+      "expected_result": "mx1.titan.email and mx2.titan.email"
+    },
+    {
+      "step": 2,
+      "action": "Check SPF record",
+      "tool": "https://spf-record.com", 
+      "expected_result": "v=spf1 include:titan.email ~all"
+    },
+    {
+      "step": 3,
+      "action": "Send test email",
+      "method": "Titan webmail",
+      "expected_result": "Email delivered to external address"
+    }
+  ]
+}
