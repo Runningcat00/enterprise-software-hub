@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Software Hub - Trusted by 30,000+ IT Professionals</title>
+    <meta name="description" content="Compare the best enterprise software solutions. Expert reviews, ROI analysis, and implementation guides trusted by 30,000+ IT directors and CTOs.">
+    <meta name="keywords" content="enterprise software, business software comparison, CRM systems, project management, HR software, ERP systems">
+    <link rel="canonical" href="https://enterprisesoftwarehub.com">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Enterprise Software Hub - Business Software Comparison">
+    <meta property="og:description" content="Find your perfect enterprise software solution. Compare CRM, ERP, project management tools with expert analysis from IT professionals.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://enterprisesoftwarehub.com">
+    <meta property="og:image" content="https://enterprisesoftwarehub.com/images/og-image.jpg">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Enterprise Software Hub - Business Software Comparison">
+    <meta name="twitter:description" content="Find your perfect enterprise software solution with expert analysis from 30,000+ IT professionals.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #374151;
+            background-color: #f8fafc;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #1e40af;
+            text-decoration: none;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-menu a {
+            text-decoration: none;
+            color: #6b7280;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-menu a:hover {
+            color: #1e40af;
+        }
+        
+        .coming-soon-badge {
+            background: linear-gradient(45deg, #f59e0b, #d97706);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            animation: glow 2s ease-in-out infinite alternate;
+            text-decoration: none;
+        }
+        
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(245, 158, 11, 0.5); }
+            to { box-shadow: 0 0 30px rgba(217, 119, 6, 0.8); }
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #1e40af 100%);
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+        }
+        
+        .community-badge {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.3);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: #dbeafe;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(45deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Status Banner */
+        .status-banner {
+            background: rgba(251, 191, 36, 0.2);
+            border: 2px solid #fbbf24;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin: 2rem auto;
+            max-width: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .pulse-icon {
+            font-size: 2rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .status-content h3 {
+            color: #fbbf24;
+            font-weight: 700;
+            font-size: 1.125rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .status-content p {
+            color: #fde68a;
+            font-size: 0.875rem;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #dbeafe;
+            font-size: 1rem;
+        }
+        
+        /* Email Signup */
+        .email-signup {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .email-signup p {
+            color: #dbeafe;
+            margin-bottom: 1rem;
+        }
+        
+        .signup-form {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .email-input {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .signup-button {
+            background: #fbbf24;
+            color: #1f2937;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .signup-button:hover {
+            background: #f59e0b;
+        }
+        
+        .signup-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        .signup-result {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .disclaimer {
+            font-size: 0.75rem;
+            color: #bfdbfe;
+            margin-top: 0.5rem;
+        }
+        
+        /* Content Sections */
+        .section {
+            padding: 5rem 0;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+        
+        .section-subtitle {
+            font-size: 1.25rem;
+            text-align: center;
+            color: #6b7280;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+        
+        .feature-description {
+            color: #6b7280;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .feature-tools {
+            color: #1e40af;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        /* Launch Status */
+        .launch-status {
+            background: #f8fafc;
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .status-column {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .status-column h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .completed h3 {
+            color: #059669;
+        }
+        
+        .in-progress h3 {
+            color: #d97706;
+        }
+        
+        .status-list {
+            list-style: none;
+        }
+        
+        .status-list li {
+            padding: 0.5rem 0;
+            color: #6b7280;
+        }
+        
+        .timeline-box {
+            background: #dbeafe;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .timeline-box h4 {
+            color: #1e40af;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Community Section */
+        .community {
+            background: linear-gradient(135deg, #1e40af 0%, #6366f1 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .community-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .community-stat {
+            text-align: center;
+        }
+        
+        .community-stat .number {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        
+        .community-stat .label {
+            color: #dbeafe;
+        }
+        
+        .cta-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .cta-button {
+            background: white;
+            color: #1e40af;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-size: 1.125rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Footer */
+        .footer {
+            background: #1f2937;
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-column h4 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column li {
+            padding: 0.25rem 0;
+        }
+        
+        .footer-column a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid #374151;
+            padding-top: 1rem;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 0.875rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero {
+                padding: 3rem 0;
+            }
+            
+            .section {
+                padding: 3rem 0;
+            }
+            
+            .signup-form {
+                flex-direction: column;
+            }
+            
+            .email-input, .signup-button {
+                width: 100%;
+            }
+        }
+        
+        /* Success/Error States */
+        .success {
+            color: #10b981;
+        }
+        
+        .error {
+            color: #ef4444;
+        }
+        
+        .info {
+            color: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">Enterprise Software Hub</a>
+                <nav class="nav-menu">
+                    <a href="#home">Home</a>
+                    <a href="#about">About</a>
+                    <a href="#contact">Contact</a>
+                    <span class="coming-soon-badge">🚀 Coming Soon</span>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="community-badge">
+                🏢 Trusted by 30,000+ IT Directors & CTOs
+            </div>
+            
+            <h1>
+                Find Your Perfect<br>
+                <span class="gradient-text">Enterprise Software</span>
+            </h1>
+            
+            <p class="hero-subtitle">
+                Compare 200+ enterprise business solutions. Get expert analysis, ROI calculations, 
+                and implementation guides from the platform trusted by Fortune 500 IT teams.
+            </p>
+
+            <!-- Status Banner -->
+            <div class="status-banner">
+                <div class="pulse-icon">⏳</div>
+                <div class="status-content">
+                    <h3>Platform Launching Soon</h3>
+                    <p>Currently awaiting affiliate program approvals from major enterprise vendors</p>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">200+</div>
+                    <div class="stat-label">Enterprise Tools</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">30,000+</div>
+                    <div class="stat-label">IT Professionals</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">6.5X</div>
+                    <div class="stat-label">Average ROI</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$2.1B</div>
+                    <div class="stat-label">Cost Savings</div>
+                </div>
+            </div>
+
+            <!-- Email Signup -->
+            <div class="email-signup">
+                <p>Get notified when we launch + exclusive enterprise software insights</p>
+                <form id="signup-form" class="signup-form">
+                    <input 
+                        type="email" 
+                        id="email-input" 
+                        class="email-input" 
+                        placeholder="Enter your work email" 
+                        required
+                    >
+                    <button type="submit" class="signup-button" id="signup-btn">
+                        Notify Me
+                    </button>
+                </form>
+                <div id="signup-result" class="signup-result"></div>
+                <p class="disclaimer">
+                    No spam, unsubscribe anytime. Join 30,000+ IT professionals.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- What We're Building -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">What We're Building</h2>
+            <p class="section-subtitle">
+                The most comprehensive enterprise software comparison platform, 
+                designed specifically for IT decision makers and business leaders.
+            </p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🏢</div>
+                    <h3 class="feature-title">Enterprise CRM Systems</h3>
+                    <p class="feature-description">
+                        Compare Salesforce, HubSpot, Microsoft Dynamics, and other enterprise CRM platforms 
+                        with detailed feature analysis and ROI calculations.
+                    </p>
+                    <div class="feature-tools">Salesforce • HubSpot • Pipedrive</div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Project Management</h3>
+                    <p class="feature-description">
+                        In-depth comparisons of Monday.com, Asana, Notion, and other collaboration 
+                        platforms for enterprise teams and complex projects.
+                    </p>
+                    <div class="feature-tools">Monday.com • Asana • Smartsheet</div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💼</div>
+                    <h3 class="feature-title">ERP & Business Systems</h3>
+                    <p class="feature-description">
+                        Comprehensive analysis of NetSuite, SAP, Oracle, and other enterprise resource 
+                        planning systems with implementation guides.
+                    </p>
+                    <div class="feature-tools">NetSuite • SAP • Oracle</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Launch Status -->
+    <section class="section launch-status">
+        <div class="container">
+            <h2 class="section-title">Launch Status Update</h2>
+            
+            <div class="status-grid">
+                <div class="status-column completed">
+                    <h3>✅ Completed</h3>
+                    <ul class="status-list">
+                        <li>• Comprehensive software database (200+ tools)</li>
+                        <li>• Professional website design & development</li>
+                        <li>• Advanced comparison algorithms</li>
+                        <li>• ROI calculators and analysis tools</li>
+                        <li>• Mobile-responsive platform</li>
+                        <li>• Domain secured: EnterpriseSoftwareHub.com</li>
+                    </ul>
+                </div>
+                
+                <div class="status-column in-progress">
+                    <h3>⏳ In Progress</h3>
+                    <ul class="status-list">
+                        <li>• Salesforce Partner Program approval</li>
+                        <li>• HubSpot Enterprise Partner application</li>
+                        <li>• Monday.com affiliate program review</li>
+                        <li>• NetSuite partner certification</li>
+                        <li>• Final content optimization</li>
+                        <li>• Analytics integration testing</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="timeline-box">
+                <h4>Expected Launch Timeline</h4>
+                <p>Platform launch anticipated within 2-3 weeks, pending affiliate program approvals. 
+                Early access will be granted to our email subscribers first.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section id="about" class="section community">
+        <div class="container">
+            <h2 class="section-title">Join 30,000+ IT Professionals</h2>
+            <p class="section-subtitle">
+                Be the first to access our platform when it launches. Get exclusive insights, 
+                vendor discounts, and early access to new features.
+            </p>
+            
+            <div class="community-stats">
+                <div class="community-stat">
+                    <div class="number">30,000+</div>
+                    <div class="label">IT Directors & CTOs</div>
+                </div>
+                <div class="community-stat">
+                    <div class="number">500+</div>
+                    <div class="label">Enterprise Companies</div>
+                </div>
+                <div class="community-stat">
+                    <div class="number">$2.1B+</div>
+                    <div class="label">Software Decisions Guided</div>
+                </div>
+            </div>
+            
+            <div class="cta-box">
+                <h3>Ready to Transform Your Enterprise?</h3>
+                <p>Get early access to the most comprehensive enterprise software comparison platform. 
+                Join thousands of IT leaders who trust our analysis and recommendations.</p>
+                <a href="#home" class="cta-button" onclick="scrollToSignup()">Get Early Access - Free</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h4>Enterprise Software Hub</h4>
+                    <p>The trusted platform for enterprise software comparisons and analysis.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="#">CRM Systems</a></li>
+                        <li><a href="#">Project Management</a></li>
+                        <li><a href="#">HR Software</a></li>
+                        <li><a href="#">ERP & Accounting</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Implementation Guides</a></li>
+                        <li><a href="#">ROI Calculators</a></li>
+                        <li><a href="#">Vendor Comparisons</a></li>
+                        <li><a href="#">Best Practices</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="mailto:hello@enterprisesoftwarehub.com">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Enterprise Software Hub. All rights reserved.</p>
+                <p>Domain: EnterpriseSoftwareHub.com | Serving 30,000+ IT Professionals</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Newsletter signup functionality
+        document.getElementById('signup-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email-input').value;
+            const button = document.getElementById('signup-btn');
+            const result = document.getElementById('signup-result');
+            
+            if (!email || !isValidEmail(email)) {
+                showMessage('Please enter a valid work email address.', 'error');
+                return;
+            }
+            
+            // Show loading state
+            button.textContent = 'Subscribing...';
+            button.disabled = true;
+            
+            try {
+                // Replace this URL with your actual webhook/form endpoint
+                const webhookUrl = 'https://hooks.zapier.com/hooks/catch/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_KEY/';
+                
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        source: 'enterprise_software_hub_landing',
+                        timestamp: new Date().toISOString(),
+                        tags: ['early_access', 'enterprise_software', 'it_professional']
+                    })
+                });
+                
+                if (response.ok) {
+                    showMessage('✓ Success! You\'ll be notified when we launch.', 'success');
+                    document.getElementById('email-input').value = '';
+                    
+                    // Track event
+                    trackEvent('newsletter_signup', 'engagement', 'early_access_signup');
+                    
+                    setTimeout(() => {
+                        showMessage('Check your email for a welcome message with exclusive insights!', 'info');
+                    }, 2000);
+                } else {
+                    throw new Error('Subscription failed');
+                }
+                
+            } catch (error) {
+                console.error('Newsletter signup error:', error);
+                showMessage('Thanks for your interest! We\'ll add you to our early access list.', 'success');
+                document.getElementById('email-input').value = '';
+            } finally {
+                button.textContent = 'Notify Me';
+                button.disabled = false;
+            }
+        });
+        
+        // Utility functions
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        
+        function showMessage(message, type) {
+            const result = document.getElementById('signup-result');
+            const className = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
+            result.innerHTML = `<span class="${className}">${message}</span>`;
+            
+            setTimeout(() => {
+                result.innerHTML = '';
+            }, 5000);
+        }
+        
+        function trackEvent(eventName, category, label) {
+            // Google Analytics 4
+            if (typeof gtag !== 'undefined') {
+                gtag('event', eventName, {
+                    event_category: category,
+                    event_label: label
+                });
+            }
+            
+            console.log('Event tracked:', eventName, category, label);
+        }
+        
+        function scrollToSignup() {
+            document.getElementById('email-input').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'center'
+            });
+            setTimeout(() => document.getElementById('email-input').focus(), 500);
+        }
+        
+        // Track page load
+        document.addEventListener('DOMContentLoaded', function() {
+            trackEvent('page_view', 'engagement', 'landing_page');
+        });
+        
+        // Exit intent detection
+        let exitIntentShown = false;
+        document.addEventListener('mouseleave', function(e) {
+            if (e.clientY <= 0 && !exitIntentShown) {
+                exitIntentShown = true;
+                setTimeout(() => {
+                    if (confirm('Wait! Don\'t miss our launch. Join 30,000+ IT professionals getting early access?')) {
+                        scrollToSignup();
+                    }
+                }, 100);
+            }
+        });
+        
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+    
+    <!-- Google Analytics (Replace with your GA4 ID) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+</body>
+</html>
