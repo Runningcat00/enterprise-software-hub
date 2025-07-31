@@ -3,12 +3,6 @@
   "version": "1.0.0",
   "description": "Enterprise Software Hub - Trusted by 30,000+ IT Professionals",
   "main": "index.html",
-  "scripts": {
-    "dev": "vercel dev",
-    "build": "echo 'Static site ready for deployment'",
-    "start": "echo 'Static site - no server needed'",
-    "deploy": "vercel --prod"
-  },
   "keywords": [
     "enterprise",
     "software",
@@ -25,8 +19,5 @@
     "type": "git",
     "url": "https://github.com/Runningcat00/enterprise-software-hub.git"
   },
-  "homepage": "https://enterprisesoftwarehub.com",
-  "engines": {
-    "node": ">=18.0.0"
-  }
+  "homepage": "https://enterprisesoftwarehub.com"
 }
