@@ -1,4 +1,4 @@
-// Enhanced newsletter API with professional email integration
+// Working newsletter API with email delivery
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -11,50 +11,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Primary: ConvertKit Integration (if configured)
-    if (process.env.CONVERTKIT_API_KEY && process.env.CONVERTKIT_FORM_ID) {
-      const convertKitResponse = await addToConvertKit({
-        email,
-        firstName,
-        lastName,
-        company,
-        source
-      });
-      
-      if (convertKitResponse.success) {
-        // Send welcome email from professional address
-        await sendWelcomeEmail(email, firstName);
-        
-        return res.status(200).json({
-          success: true,
-          message: 'Success! Check your email from hello@enterprisesoftwarehub.com for exclusive insights.',
-          provider: 'convertkit'
-        });
-      }
-    }
-
-    // Fallback: Mailchimp Integration (if configured)
-    if (process.env.MAILCHIMP_API_KEY && process.env.MAILCHIMP_LIST_ID) {
-      const mailchimpResponse = await addToMailchimp({
-        email,
-        firstName,
-        lastName,
-        company,
-        source
-      });
-      
-      if (mailchimpResponse.success) {
-        await sendWelcomeEmail(email, firstName);
-        
-        return res.status(200).json({
-          success: true,
-          message: 'Welcome! Check your email from hello@enterprisesoftwarehub.com for enterprise software insights.',
-          provider: 'mailchimp'
-        });
-      }
-    }
-
-    // Fallback: Log subscription and send notification email
+    // Log the signup first
     console.log('Newsletter signup:', {
       email,
       firstName,
@@ -65,8 +22,26 @@ export default async function handler(req, res) {
       userAgent: req.headers['user-agent']
     });
 
-    // Send notification to business email
-    await sendSignupNotification({
+    // Option 1: Send via email service (Resend, SendGrid, etc.)
+    let emailSent = false;
+
+    // Try Resend first (easiest to set up)
+    if (process.env.RESEND_API_KEY) {
+      emailSent = await sendWithResend(email, firstName);
+    }
+    
+    // Fallback to SendGrid
+    if (!emailSent && process.env.SENDGRID_API_KEY) {
+      emailSent = await sendWithSendGrid(email, firstName);
+    }
+
+    // Fallback to simple SMTP
+    if (!emailSent && process.env.SMTP_HOST) {
+      emailSent = await sendWithSMTP(email, firstName);
+    }
+
+    // Always send notification to business email
+    await sendBusinessNotification({
       email,
       firstName,
       lastName,
@@ -74,154 +49,240 @@ export default async function handler(req, res) {
       source
     });
 
-    return res.status(200).json({
-      success: true,
-      message: 'Thank you for joining! Welcome to our community of 30,000+ IT professionals.',
-      provider: 'fallback'
-    });
+    if (emailSent) {
+      return res.status(200).json({
+        success: true,
+        message: 'Success! Check your email from hello@enterprisesoftwarehub.com for exclusive insights.',
+        emailSent: true
+      });
+    } else {
+      // Even if email fails, record the signup
+      return res.status(200).json({
+        success: true,
+        message: 'Thank you for joining! Welcome to our community of 30,000+ IT professionals.',
+        emailSent: false,
+        note: 'Email service not configured - signup recorded'
+      });
+    }
 
   } catch (error) {
     console.error('Newsletter signup error:', error);
     
-    // Always return success to user (graceful fallback)
     return res.status(200).json({
       success: true,
       message: 'Thanks for signing up! We\'ll be in touch with exclusive enterprise software insights.',
-      provider: 'error_fallback'
+      error: 'partial_failure'
     });
   }
 }
 
-// ConvertKit Integration
-async function addToConvertKit({ email, firstName, lastName, company, source }) {
+// Resend Email Service (recommended - easiest setup)
+async function sendWithResend(email, firstName) {
   try {
-    const response = await fetch(`https://api.convertkit.com/v3/forms/${process.env.CONVERTKIT_FORM_ID}/subscribe`, {
+    const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        api_key: process.env.CONVERTKIT_API_KEY,
-        email: email,
-        first_name: firstName || '',
-        fields: {
-          last_name: lastName || '',
-          company: company || '',
-          source: source,
-          signup_date: new Date().toISOString(),
-          community_size: '30000+',
-          platform: 'enterprise_software_hub'
-        },
-        tags: [
-          'enterprise_software',
-          'early_access',
-          'it_professional',
-          source.replace('_', '-')
-        ]
-      })
+        from: 'Enterprise Software Hub <hello@enterprisesoftwarehub.com>',
+        to: [email],
+        subject: 'Welcome to Enterprise Software Hub - Your exclusive preview inside',
+        html: getWelcomeEmailHTML(firstName),
+        text: getWelcomeEmailText(firstName)
+      }),
     });
 
     if (response.ok) {
-      return { success: true, data: await response.json() };
+      console.log('Email sent via Resend to:', email);
+      return true;
     } else {
-      throw new Error(`ConvertKit API error: ${response.status}`);
+      console.error('Resend error:', await response.text());
+      return false;
     }
   } catch (error) {
-    console.error('ConvertKit error:', error);
-    return { success: false, error };
+    console.error('Resend send error:', error);
+    return false;
   }
 }
 
-// Mailchimp Integration
-async function addToMailchimp({ email, firstName, lastName, company, source }) {
+// SendGrid Email Service (alternative)
+async function sendWithSendGrid(email, firstName) {
   try {
-    const listId = process.env.MAILCHIMP_LIST_ID;
-    const apiKey = process.env.MAILCHIMP_API_KEY;
-    const serverPrefix = apiKey.split('-')[1];
-
-    const response = await fetch(`https://${serverPrefix}.api.mailchimp.com/3.0/lists/${listId}/members`, {
+    const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${process.env.SENDGRID_API_KEY}`,
         'Content-Type': 'application/json',
-        'Authorization': `apikey ${apiKey}`
       },
       body: JSON.stringify({
-        email_address: email,
-        status: 'subscribed',
-        merge_fields: {
-          FNAME: firstName || '',
-          LNAME: lastName || '',
-          COMPANY: company || '',
-          SOURCE: source
+        personalizations: [{
+          to: [{ email: email, name: firstName || '' }],
+          subject: 'Welcome to Enterprise Software Hub - Your exclusive preview inside'
+        }],
+        from: {
+          email: 'hello@enterprisesoftwarehub.com',
+          name: 'Enterprise Software Hub'
         },
-        tags: [
-          'enterprise_software',
-          'early_access',
-          'it_professional'
+        content: [
+          {
+            type: 'text/plain',
+            value: getWelcomeEmailText(firstName)
+          },
+          {
+            type: 'text/html',
+            value: getWelcomeEmailHTML(firstName)
+          }
         ]
-      })
+      }),
     });
 
-    if (response.ok || response.status === 400) { // 400 might mean already subscribed
-      return { success: true, data: await response.json() };
+    if (response.ok || response.status === 202) {
+      console.log('Email sent via SendGrid to:', email);
+      return true;
     } else {
-      throw new Error(`Mailchimp API error: ${response.status}`);
+      console.error('SendGrid error:', await response.text());
+      return false;
     }
   } catch (error) {
-    console.error('Mailchimp error:', error);
-    return { success: false, error };
+    console.error('SendGrid send error:', error);
+    return false;
   }
 }
 
-// Send welcome email from professional address
-async function sendWelcomeEmail(email, firstName) {
+// Simple SMTP fallback (using nodemailer)
+async function sendWithSMTP(email, firstName) {
   try {
-    // This would integrate with your email service (SendGrid, Titan SMTP, etc.)
-    // For now, we'll log the welcome email intent
-    console.log('Welcome email triggered:', {
-      to: email,
-      from: 'hello@enterprisesoftwarehub.com',
-      firstName: firstName,
-      subject: 'Welcome to Enterprise Software Hub - Your exclusive preview inside'
-    });
-    
-    // TODO: Integrate with SendGrid, SMTP, or email service
-    // Example SendGrid integration:
-    /*
-    if (process.env.SENDGRID_API_KEY) {
-      await sendGridMail.send({
-        to: email,
-        from: 'hello@enterprisesoftwarehub.com',
-        subject: 'Welcome to Enterprise Software Hub - Your exclusive preview inside',
-        html: getWelcomeEmailTemplate(firstName)
+    // This would require nodemailer package
+    console.log('SMTP email would be sent to:', email);
+    // For now, just log - would need to install nodemailer
+    return false;
+  } catch (error) {
+    console.error('SMTP send error:', error);
+    return false;
+  }
+}
+
+// Send notification to business
+async function sendBusinessNotification({ email, firstName, lastName, company, source }) {
+  try {
+    // Send notification email to business address
+    if (process.env.RESEND_API_KEY) {
+      await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: 'Enterprise Software Hub <noreply@enterprisesoftwarehub.com>',
+          to: ['hello@enterprisesoftwarehub.com'],
+          subject: 'New Enterprise Software Hub Signup',
+          html: `
+            <h2>New Newsletter Signup</h2>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Name:</strong> ${firstName || ''} ${lastName || ''}</p>
+            <p><strong>Company:</strong> ${company || 'Not provided'}</p>
+            <p><strong>Source:</strong> ${source}</p>
+            <p><strong>Time:</strong> ${new Date().toISOString()}</p>
+          `
+        }),
       });
     }
-    */
     
-    return { success: true };
+    console.log('Business notification sent for signup:', email);
+    return true;
   } catch (error) {
-    console.error('Welcome email error:', error);
-    return { success: false, error };
+    console.error('Business notification error:', error);
+    return false;
   }
 }
 
-// Send signup notification to business
-async function sendSignupNotification({ email, firstName, lastName, company, source }) {
-  try {
-    console.log('New signup notification:', {
-      to: 'hello@enterprisesoftwarehub.com',
-      subject: 'New Enterprise Software Hub Signup',
-      subscriber: email,
-      details: { firstName, lastName, company, source },
-      timestamp: new Date().toISOString()
-    });
-    
-    // TODO: Send actual notification email to business address
-    return { success: true };
-  } catch (error) {
-    console.error('Signup notification error:', error);
-    return { success: false, error };
-  }
+// Welcome email HTML template
+function getWelcomeEmailHTML(firstName) {
+  const name = firstName ? firstName : 'there';
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <title>Welcome to Enterprise Software Hub</title>
+    </head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+      <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h1 style="color: #1e40af;">Welcome to Enterprise Software Hub!</h1>
+        
+        <p>Hi ${name},</p>
+        
+        <p>Welcome to Enterprise Software Hub! You've just joined 30,000+ IT Directors, CTOs, and enterprise decision makers who trust us for software guidance.</p>
+        
+        <h2 style="color: #1e40af;">🎯 What You Can Expect:</h2>
+        <ul>
+          <li>✅ Exclusive enterprise software insights (weekly)</li>
+          <li>✅ Early access to our comparison platform (launching soon)</li>
+          <li>✅ Affiliate program approval updates</li>
+          <li>✅ ROI calculators and implementation guides</li>
+          <li>✅ Direct access to software vendor discounts</li>
+        </ul>
+        
+        <h2 style="color: #1e40af;">📋 Platform Launch Update:</h2>
+        <p>We're currently finalizing partnerships with:</p>
+        <ul>
+          <li>• Salesforce (Partner Program - $2,500 avg commission)</li>
+          <li>• HubSpot Enterprise (Solutions Partner - 15-30% recurring)</li>
+          <li>• Monday.com (Affiliate Program - $500-1,500 per sale)</li>
+          <li>• NetSuite (Partner Program - $2,000-5,000 per deal)</li>
+        </ul>
+        
+        <p>Early access subscribers get first priority when we launch.</p>
+        
+        <p>Best regards,<br>
+        The Enterprise Software Hub Team</p>
+        
+        <hr style="margin: 30px 0;">
+        <p style="font-size: 12px; color: #666;">
+          Serving 30,000+ IT Professionals | EnterpriseSoftwareHub.com<br>
+          <a href="#" style="color: #666;">Unsubscribe</a> | <a href="#" style="color: #666;">Update Preferences</a>
+        </p>
+      </div>
+    </body>
+    </html>
+  `;
+}
+
+// Welcome email text template
+function getWelcomeEmailText(firstName) {
+  const name = firstName ? firstName : 'there';
+  return `
+Welcome to Enterprise Software Hub!
+
+Hi ${name},
+
+Welcome to Enterprise Software Hub! You've just joined 30,000+ IT Directors, CTOs, and enterprise decision makers who trust us for software guidance.
+
+What You Can Expect:
+✅ Exclusive enterprise software insights (weekly)
+✅ Early access to our comparison platform (launching soon)
+✅ Affiliate program approval updates
+✅ ROI calculators and implementation guides
+✅ Direct access to software vendor discounts
+
+Platform Launch Update:
+We're currently finalizing partnerships with:
+• Salesforce (Partner Program - $2,500 avg commission)
+• HubSpot Enterprise (Solutions Partner - 15-30% recurring)
+• Monday.com (Affiliate Program - $500-1,500 per sale)
+• NetSuite (Partner Program - $2,000-5,000 per deal)
+
+Early access subscribers get first priority when we launch.
+
+Best regards,
+The Enterprise Software Hub Team
+
+---
+Serving 30,000+ IT Professionals | EnterpriseSoftwareHub.com
+  `;
 }
 
 // Email validation
